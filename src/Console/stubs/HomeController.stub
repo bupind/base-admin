@@ -1,0 +1,36 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\Http\Controllers\Controller;
+use Base\Admin\Admin;
+use Base\Admin\Controllers\Dashboard;
+use Base\Admin\Layout\Column;
+use Base\Admin\Layout\Content;
+use Base\Admin\Layout\Row;
+
+class HomeController extends Controller
+{
+    public function index(Content $content)
+    {
+        return $content
+            ->css_file(Admin::asset("base-admin/css/pages/dashboard.css"))
+            ->title('Dashboard')
+            ->description('Description...')
+            ->row(Dashboard::title())
+            ->row(function (Row $row) {
+
+                $row->column(4, function (Column $column) {
+                    $column->append(Dashboard::environment());
+                });
+
+                $row->column(4, function (Column $column) {
+                    $column->append(Dashboard::extensions());
+                });
+
+                $row->column(4, function (Column $column) {
+                    $column->append(Dashboard::dependencies());
+                });
+            });
+    }
+}

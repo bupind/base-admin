@@ -1,0 +1,74 @@
+<?php
+
+namespace Base\Admin\Auth\Database;
+
+use Base\Admin\Traits\DefaultDatetimeFormat;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Storage;
+
+/**
+ * Class Administrator.
+ *
+ * @property Role[] $roles
+ */
+class Administrator extends Model implements AuthenticatableContract
+{
+    use Authenticatable;
+    use DefaultDatetimeFormat;
+    use HasPermissions;
+
+    protected $fillable = ['username', 'password', 'name', 'avatar'];
+
+    /**
+     * Create a new Eloquent model instance.
+     */
+    public function __construct(array $attributes = [])
+    {
+        $connection = config('backend.database.connection') ?: config('database.default');
+        $this->setConnection($connection);
+        $this->setTable(config('backend.database.users_table'));
+        parent::__construct($attributes);
+    }
+
+    /**
+     * Get avatar attribute.
+     *
+     * @param string $avatar
+     * @return string
+     */
+    public function getAvatarAttribute($avatar)
+    {
+        if(url()->isValidUrl($avatar)) {
+            return $avatar;
+        }
+        $disk = config('backend.upload.disk');
+        if($avatar && array_key_exists($disk, config('filesystems.disks'))) {
+            return Storage::disk(config('backend.upload.disk'))->url($avatar);
+        }
+        $default = config('backend.default_avatar') ?: '/vendor/bupind/base-admin/gfx/user.svg';
+        return admin_asset($default);
+    }
+
+    /**
+     * A user has and belongs to many roles.
+     */
+    public function roles(): BelongsToMany
+    {
+        $pivotTable = config('backend.database.role_users_table');
+        $relatedModel = config('backend.database.roles_model');
+        return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'role_id');
+    }
+
+    /**
+     * A User has and belongs to many permissions.
+     */
+    public function permissions(): BelongsToMany
+    {
+        $pivotTable = config('backend.database.user_permissions_table');
+        $relatedModel = config('backend.database.permissions_model');
+        return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'permission_id');
+    }
+}
