@@ -102,7 +102,6 @@ class AdminServiceProvider extends ServiceProvider
             $this->publishes([__DIR__ . '/../resources/lang' => resource_path('lang')], 'base-admin-lang');
             $this->publishes([__DIR__ . '/../database/migrations' => database_path('migrations')], 'base-admin-migrations');
             $this->publishes([__DIR__ . '/../resources/assets' => public_path('vendor/base')], 'base-admin-assets');
-            $this->publishes([__DIR__ . '/../resources/assets/test' => public_path('vendor/base-admin-test')], 'base-admin-test');
         }
     }
 
