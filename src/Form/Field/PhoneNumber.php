@@ -5,7 +5,7 @@ namespace Base\Admin\Form\Field;
 class PhoneNumber extends Text
 {
     protected static $js = [
-        '/vendor/base-admin/inputmask/inputmask.min.js',
+        '/vendor/base/inputmask/inputmask.min.js',
     ];
 
     /**

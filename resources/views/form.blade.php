@@ -1,48 +1,48 @@
-<div class="card box-info">
+<div class="card">
     <div class="card-header with-border">
-        <h3 class="card-title">{{ $form->title() }}</h3>
-
-        <div class="card-tools">
-            {!! $form->renderTools() !!}
-        </div>
+        {!! $form->renderTools() !!}
     </div>
-    <!-- /.box-header -->
-    <!-- form start -->
     {!! $form->open() !!}
-
-    <div class="card-body p-0">
-
-        @if(!$tabObj->isEmpty())
-            @include('backend::form.tab', compact('tabObj'))
-        @else
-            <div class="row fields-group">
-
-                @if($form->hasRows())
-                    @foreach($form->getRows() as $row)
-                        {!! $row->render() !!}
-                    @endforeach
-                @else
-                    @foreach($layout->columns() as $column)
-                        <div class="col-md-{{ $column->width() }}">
+        <div class="card-body">
+            @if(!$tabObj->isEmpty())
+                @include('backend::form.tab', compact('tabObj'))
+            @else
+                <div class="row">
+                    @if($form->hasRows())
+                        @foreach($form->getRows() as $row)
+                            {!! $row->render() !!}
+                        @endforeach
+                    @else
+                        @foreach($layout->columns() as $column)
                             @foreach($column->fields() as $field)
                                 {!! $field->render() !!}
                             @endforeach
-                        </div>
-                    @endforeach
-                @endif
+                        @endforeach
+                    @endif
+                </div>
+            @endif
+        </div>
+
+
+    <footer class="navbar form-footer navbar-light bg-white py-3 px-4 @if (!empty($fixedFooter))shadow fixed-bottom @endif">
+        <div class="row">
+            {{ csrf_field() }}
+            <div class="col-md-{{$width['label']}}"></div>
+            <div class="col-md-{{$width['field']}} d-flex align-items-center ">
+                <div class="flex-grow-1 ">
+
+                </div>
+                <div class="btn-group">
+                    {!! $form->renderFooter() !!}
+                </div>
             </div>
-        @endif
+        </div>
+    </footer>
 
-    </div>
-    <!-- /.box-body -->
-
-    {!! $form->renderFooter() !!}
 
     @foreach($form->getHiddenFields() as $field)
         {!! $field->render() !!}
     @endforeach
-
-<!-- /.box-footer -->
     {!! $form->close() !!}
 
 </div>

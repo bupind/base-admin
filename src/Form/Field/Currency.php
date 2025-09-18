@@ -13,7 +13,7 @@ class Currency extends Text
      * @var array
      */
     protected static $js = [
-        '/vendor/base-admin/inputmask/inputmask.min.js',
+        '/vendor/base/inputmask/inputmask.min.js',
     ];
 
     /**

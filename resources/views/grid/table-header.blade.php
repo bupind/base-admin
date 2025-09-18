@@ -10,10 +10,15 @@
         @if ( $grid->showTools() || $grid->showExportBtn() || $grid->showCreateBtn() )
         <div class="row">
             <div class="col-auto me-auto">
-                {!! $grid->renderCreateButton() !!}
-                @if ( $grid->showTools() )
-                {!! $grid->renderHeaderTools() !!}
-                @endif
+                <div class="btn-group">
+                    {!! $grid->renderCreateButton() !!}
+                    @if ( $grid->showTools() )
+                        {!! $grid->renderHeaderTools() !!}
+                    @endif
+                    <a onclick="backend.ajax.reload();" class="btn btn-sm btn-info container-refresh">
+                        <i class="icon-sync-alt"></i>
+                    </a>
+                </div>
             </div>
             <div class="col-auto">
                 {!! $grid->renderExportButton() !!}

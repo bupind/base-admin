@@ -44,7 +44,7 @@ class UninstallCommand extends Command
     protected function removeFilesAndDirectories()
     {
         $this->laravel['files']->deleteDirectory(config('backend.directory'));
-        $this->laravel['files']->deleteDirectory(public_path('vendor/base-admin/'));
+        $this->laravel['files']->deleteDirectory(public_path('vendor/base/'));
         $this->laravel['files']->delete(config_path('backend.php'));
     }
 }

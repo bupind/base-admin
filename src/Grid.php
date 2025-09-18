@@ -56,7 +56,7 @@ class Grid
      *
      * @var bool
      */
-    public $fixedFooter = true;
+    public $fixedFooter = false;
     /**
      * Per-page options.
      *
@@ -708,6 +708,7 @@ class Grid
     {
         $this->prependRowSelectorColumn();
         $this->appendActionsColumn();
+        $this->reorderColumns();
     }
 
     /**
@@ -742,12 +743,6 @@ class Grid
         });
     }
 
-    /**
-     * Build the grid rows.
-     *
-     *
-     * @return void
-     */
     protected function buildRows(array $data, Collection $collection)
     {
         $this->rows = collect($data)->map(function($model, $number) use ($collection) {
@@ -823,5 +818,33 @@ class Grid
     {
         $this->renderingCallbacks[] = $callback;
         return $this;
+    }
+
+    protected function reorderColumns()
+    {
+        $selector = null;
+        $actions  = null;
+        $others   = collect();
+        foreach($this->columns as $col) {
+            if(method_exists($col, 'getName')) {
+                if($col->getName() === Column::SELECT_COLUMN_NAME) {
+                    $selector = $col;
+                    continue;
+                }
+                if($col->getName() === Column::ACTION_COLUMN_NAME) {
+                    $actions = $col;
+                    continue;
+                }
+            }
+            $others->push($col);
+        }
+        $this->columns = collect();
+        if($selector) {
+            $this->columns->push($selector);
+        }
+        if($actions) {
+            $this->columns->push($actions);
+        }
+        $this->columns = $this->columns->merge($others);
     }
 }

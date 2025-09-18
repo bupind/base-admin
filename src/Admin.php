@@ -53,7 +53,7 @@ class Admin
 
     public static function asset($asset)
     {
-        return url('/vendor/base-admin/' . $asset);
+        return url('/vendor/base/' . $asset);
     }
 
     public static function js_trans()

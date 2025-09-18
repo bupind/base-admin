@@ -8,9 +8,12 @@ class Edit extends RowAction
 {
     public $icon = 'icon-pen';
 
-    /**
-     * @return array|null|string
-     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->setActionClass('btn-warning btn-sm');
+    }
+
     public function name()
     {
         return __('backend.edit');

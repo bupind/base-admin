@@ -7,7 +7,7 @@ class Ip extends Text
     protected $rules = 'nullable|ip';
 
     protected static $js = [
-        '/vendor/base-admin/inputmask/inputmask.min.js',
+        '/vendor/base/inputmask/inputmask.min.js',
     ];
 
     /**

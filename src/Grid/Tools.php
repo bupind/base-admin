@@ -2,9 +2,6 @@
 
 namespace Base\Admin\Grid;
 
-use Illuminate\Contracts\Support\Htmlable;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Support\Collection;
 use Base\Admin\Actions\Action;
 use Base\Admin\Actions\BatchAction;
 use Base\Admin\Actions\GridAction;
@@ -12,6 +9,9 @@ use Base\Admin\Grid;
 use Base\Admin\Grid\Tools\AbstractTool;
 use Base\Admin\Grid\Tools\BatchActions;
 use Base\Admin\Grid\Tools\FilterButton;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\Support\Renderable;
+use Illuminate\Support\Collection;
 
 class Tools implements Renderable
 {
@@ -21,7 +21,6 @@ class Tools implements Renderable
      * @var Grid
      */
     protected $grid;
-
     /**
      * Collection of tools.
      *
@@ -34,10 +33,8 @@ class Tools implements Renderable
      */
     public function __construct(Grid $grid)
     {
-        $this->grid = $grid;
-
+        $this->grid  = $grid;
         $this->tools = new Collection;
-
         $this->appendDefaultTools();
     }
 
@@ -53,36 +50,32 @@ class Tools implements Renderable
     /**
      * Append tools.
      *
-     * @param  AbstractTool|string  $tool
+     * @param AbstractTool|string $tool
      * @return $this
      */
     public function append($tool)
     {
-        if ($tool instanceof GridAction || $tool instanceof BatchAction) {
+        if($tool instanceof GridAction || $tool instanceof BatchAction) {
             $tool->setGrid($this->grid);
         }
-
-        if ($tool instanceof Action) {
-            $model = $this->grid->model()->getOriginalModel();
+        if($tool instanceof Action) {
+            $model     = $this->grid->model()->getOriginalModel();
             $model_str = str_replace('\\', '_', get_class($model));
             $tool->parameter('_model', $model_str);
         }
-
         $this->tools->push($tool);
-
         return $this;
     }
 
     /**
      * Prepend a tool.
      *
-     * @param  AbstractTool|string  $tool
+     * @param AbstractTool|string $tool
      * @return $this
      */
     public function prepend($tool)
     {
         $this->tools->prepend($tool);
-
         return $this;
     }
 
@@ -93,11 +86,10 @@ class Tools implements Renderable
      */
     public function disableFilterButton(bool $disable = true)
     {
-        $this->tools = $this->tools->map(function ($tool) use ($disable) {
-            if ($tool instanceof FilterButton) {
+        $this->tools = $this->tools->map(function($tool) use ($disable) {
+            if($tool instanceof FilterButton) {
                 return $tool->disable($disable);
             }
-
             return $tool;
         });
     }
@@ -121,18 +113,17 @@ class Tools implements Renderable
      */
     public function disableBatchActions(bool $disable = true)
     {
-        $this->tools = $this->tools->map(function ($tool) use ($disable) {
-            if ($tool instanceof BatchActions) {
+        $this->tools = $this->tools->map(function($tool) use ($disable) {
+            if($tool instanceof BatchActions) {
                 return $tool->disable($disable);
             }
-
             return $tool;
         });
     }
 
     public function batch(\Closure $closure)
     {
-        call_user_func($closure, $this->tools->first(function ($tool) {
+        call_user_func($closure, $this->tools->first(function($tool) {
             return $tool instanceof BatchActions;
         }));
     }
@@ -144,24 +135,20 @@ class Tools implements Renderable
      */
     public function render()
     {
-        return $this->tools->map(function ($tool) {
-            if ($tool instanceof AbstractTool) {
-                if (! $tool->allowed()) {
+        return $this->tools->map(function($tool) {
+            if($tool instanceof AbstractTool) {
+                if(!$tool->allowed()) {
                     return '';
                 }
-
                 return $tool->setGrid($this->grid)->render();
             }
-
-            if ($tool instanceof Renderable) {
+            if($tool instanceof Renderable) {
                 return $tool->render();
             }
-
-            if ($tool instanceof Htmlable) {
+            if($tool instanceof Htmlable) {
                 return $tool->toHtml();
             }
-
-            return (string) $tool;
+            return (string)$tool;
         })->implode(' ');
     }
 }

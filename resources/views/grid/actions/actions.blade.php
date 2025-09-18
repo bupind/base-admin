@@ -1,10 +1,10 @@
-<div class="__actions__div @if(!empty($showLabels))with-labels @endif">
+<div class="btn-group btn-group-xs __actions__div @if(!empty($showLabels))with-labels @endif">
     @foreach($default as $action)
         {!! $action->render() !!}
     @endforeach
     @if(!empty($custom))
         @if(!empty($default))
-        <span class="row-action-divider"></span>
+            <span class="row-action-divider"></span>
         @endif
         @foreach($custom as $action)
             {!! $action->render() !!}

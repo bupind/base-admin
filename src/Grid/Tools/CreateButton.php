@@ -33,7 +33,7 @@ class CreateButton extends AbstractTool
         $new = trans('backend.new');
 
         return <<<HTML
-        <a href="{$this->grid->getCreateUrl()}" class="btn btn-sm btn-success me-1 grid-create-btn" title="{$new}">
+        <a href="{$this->grid->getCreateUrl()}" class="btn btn-sm btn-success grid-create-btn" title="{$new}">
             <i class="icon-plus"></i><span class="hidden-xs">{$new}</span>
         </a>
         HTML;

@@ -23,11 +23,13 @@
         }
     }
 }
-.dropdown-menu{
-    li{
-        list-style:none;
-        .btn{
-            font-size:0.9em;
+
+.dropdown-menu {
+    li {
+        list-style: none;
+
+        .btn {
+            font-size: 0.9em;
         }
     }
 }
@@ -51,6 +53,7 @@
     .card-body {
         padding-bottom: 0;
     }
+
     .card-footer {
         margin-top: 0.25rem;
         padding: 0.8rem 0 1.5rem 0.75rem;
@@ -61,29 +64,33 @@
         }
     }
 }
+
 .btn-filter {
 
-    .icon-angle-up{
-        display:inline;
-    }
-    .icon-angle-down{
-        display:none;
+    .icon-angle-up {
+        display: inline;
     }
 
-    &.collapsed{
-        .icon-angle-up{
-            display:none;
+    .icon-angle-down {
+        display: none;
+    }
+
+    &.collapsed {
+        .icon-angle-up {
+            display: none;
         }
-        .icon-angle-down{
-            display:inline;
+
+        .icon-angle-down {
+            display: inline;
         }
     }
 }
-.popover .flatpickr-calendar, .dropdown-menu .flatpickr-calendar{
-    box-shadow:none;
+
+.popover .flatpickr-calendar, .dropdown-menu .flatpickr-calendar {
+    box-shadow: none;
     border: 1px solid #CCC;
     border-radius: 4px;
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
 
 /*---------------------------------------------------------*/
@@ -122,21 +129,21 @@
 .table > :not(:last-child) > :last-child > * {
     border-color: var(--table-border-color);
 }
+
 .grid-table tr td {
     vertical-align: middle !important;
-    height: 4rem;
     font-weight: lighter;
 }
 
-.table tr td{
+.table tr td {
     white-space: nowrap;
 }
 
-body .table.allow-wrap tr td{
-    white-space:unset;
+body .table.allow-wrap tr td {
+    white-space: unset;
 }
 
-.table > :not(:first-child){
+.table > :not(:first-child) {
     border-top: 2px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -149,9 +156,9 @@ body .table.allow-wrap tr td{
         }
     }
 
-    td{
-        td{
-            height:auto;
+    td {
+        td {
+            height: auto;
         }
 
         &:last-child .__actions__div a {
@@ -164,7 +171,7 @@ body .table.allow-wrap tr td{
         }
 
         &:last-child .__actions__div.with-labels a {
-            width:auto;
+            width: auto;
 
         }
 
@@ -174,20 +181,20 @@ body .table.allow-wrap tr td{
 
         &:last-child a .fa:after {
             font-family: "open_sansregular", "Helvetica Neue", Helvetica, Arial,
-                sans-serif;
+            sans-serif;
             padding-left: 5px;
         }
 
         &.column-__actions__ {
-            overflow:auto;
+            overflow: auto;
         }
 
-        .__actions__div .label{
-            display:none;
+        .__actions__div .label {
+            display: none;
         }
 
-        .__actions__div.with-labels .label{
-            display:inline-block;
+        .__actions__div.with-labels .label {
+            display: inline-block;
         }
 
     }
@@ -200,6 +207,7 @@ body .table.allow-wrap tr td{
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
     thead {
         td {
             overflow: auto;
@@ -221,9 +229,9 @@ body .table.allow-wrap tr td{
         right: 0px;
         background: rgb(255, 255, 255);
         background: linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 1) 30%
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 1) 30%
         );
         padding-left: 2rem;
     }
@@ -241,22 +249,22 @@ body .table.allow-wrap tr td{
 /* inline edit */
 /*---------------------------------------------------------*/
 
-.ie-wrap>a {
-    margin-left:-3px;
+.ie-wrap > a {
+    margin-left: -3px;
     padding: 3px 4px 3px 6px;
     border-radius: 3px;
     color: var(--table-color);
-    cursor:pointer;
+    cursor: pointer;
     text-decoration-style: dotted;
 }
 
-.ie-wrap>a:hover {
+.ie-wrap > a:hover {
     text-decoration: none;
     background-color: #d7dbe8;
     color: var(--table-color);
 }
 
-.ie-wrap>a:hover i {
+.ie-wrap > a:hover i {
     visibility: visible !important;
 }
 
@@ -265,7 +273,7 @@ body .table.allow-wrap tr td{
     float: right;
 }
 
-.ie-container  {
+.ie-container {
     width: 250px;
     position: relative;
 }
@@ -279,20 +287,21 @@ body .table.allow-wrap tr td{
 /* empty grid */
 /*---------------------------------------------------------*/
 
-.empty-grid{
+.empty-grid {
     padding: 100px;
     text-align: center;
     color: #999999;
-    svg{
-        margin:50px;
+
+    svg {
+        margin: 50px;
     }
 }
 
 .belongsto,
-.belongstomany{
-    svg{
-        height:80px;
-        width:80px;
-        margin:20px;
+.belongstomany {
+    svg {
+        height: 80px;
+        width: 80px;
+        margin: 20px;
     }
 }

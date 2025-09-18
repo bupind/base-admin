@@ -40,8 +40,8 @@ class Map extends Field
                 break;
             case 'openstreetmaps':
             default:
-                $css = ['/vendor/base-admin/leaflet/leaflet.css', '/vendor/base-admin/leaflet/leaflet-geosearch.css'];
-                $js = ['/vendor/base-admin/leaflet/leaflet.js', '/vendor/base-admin/leaflet/leaflet-geosearch.js'];
+                $css = ['/vendor/base/leaflet/leaflet.css', '/vendor/base/leaflet/leaflet-geosearch.css'];
+                $js = ['/vendor/base/leaflet/leaflet.js', '/vendor/base/leaflet/leaflet-geosearch.js'];
         }
 
         return compact('js', 'css');

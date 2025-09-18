@@ -9,7 +9,7 @@ class Number extends Text
     use HasNumberModifiers;
 
     protected static $js = [
-        '/vendor/base-admin/fields/number-input.js',
+        '/vendor/base/fields/number-input.js',
     ];
 
     protected $view = 'backend::form.number';

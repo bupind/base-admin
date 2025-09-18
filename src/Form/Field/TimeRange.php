@@ -24,7 +24,7 @@ class TimeRange extends Field
     protected $column = [];
 
     protected static $js = [
-        '/vendor/base-admin/flatpickr/plugins/minMaxTimePlugin.js',
+        '/vendor/base/flatpickr/plugins/minMaxTimePlugin.js',
     ];
 
     public function __construct($column, $arguments)

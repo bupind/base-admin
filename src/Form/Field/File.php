@@ -14,11 +14,11 @@ class File extends Field
     use UploadField;
 
     protected static $css = [
-        '/vendor/base-admin/fields/file-upload/file-upload.css',
+        '/vendor/base/fields/file-upload/file-upload.css',
     ];
 
     protected static $js = [
-        '/vendor/base-admin/fields/file-upload/file-upload.js',
+        '/vendor/base/fields/file-upload/file-upload.js',
     ];
 
     public $type = 'file';

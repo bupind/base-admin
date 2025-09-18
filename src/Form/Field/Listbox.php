@@ -12,13 +12,13 @@ class Listbox extends MultipleSelect
     protected $settings = [];
     /*
     protected static $css = [
-        '/vendor/base-admin/dual-listbox/dual-listbox.css',
+        '/vendor/base/dual-listbox/dual-listbox.css',
         // overwritten bootstrap styles
     ];
     */
 
     protected static $js = [
-        '/vendor/base-admin/dual-listbox/dual-listbox-custom.js',
+        '/vendor/base/dual-listbox/dual-listbox-custom.js',
     ];
 
     public function settings(array $settings)

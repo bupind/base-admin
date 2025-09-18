@@ -72,8 +72,8 @@ class AdminServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->loadViewsFrom(resource_path('views/layout/backend'), 'backend');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'backend');
-        $this->loadViewsFrom(resource_path('views/base'), 'base');
         $this->ensureHttps();
         if(file_exists($routes = admin_path('routes.php'))) {
             $this->loadRoutesFrom($routes);

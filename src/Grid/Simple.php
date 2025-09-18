@@ -2,8 +2,8 @@
 
 namespace Base\Admin\Grid;
 
-use Illuminate\Contracts\Support\Renderable;
 use Base\Admin\Grid;
+use Illuminate\Contracts\Support\Renderable;
 
 /**
  * @mixin Grid
@@ -14,22 +14,19 @@ class Simple implements Renderable
      * @var Grid
      */
     protected $grid;
-
     /**
      * @var string
      */
     protected $model;
 
     /**
-     * @param  null  $key
+     * @param null $key
      * @return string
      */
     public function render($key = null)
     {
         $this->grid = new Grid(new $this->model);
-
         $this->make($key);
-
         return $this->grid
             ->disableActions()
             ->disableBatchActions()
@@ -43,8 +40,8 @@ class Simple implements Renderable
     }
 
     /**
-     * @param  string  $name
-     * @param  array  $arguments
+     * @param string $name
+     * @param array $arguments
      * @return mixed
      */
     public function __call($name, $arguments)

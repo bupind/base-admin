@@ -12,7 +12,7 @@ trait HasFooter
      */
     protected $footer;
 
-    public $fixedFooter = true;
+    public $fixedFooter = false;
 
     /**
      * Set footer fixed.

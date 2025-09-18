@@ -7,7 +7,7 @@ class Icon extends Text
     protected $default = '';
 
     protected static $js = [
-        '/vendor/base-admin/fields/icon-picker/icon-picker.js',
+        '/vendor/base/fields/icon-picker/icon-picker.js',
     ];
 
     public function render()

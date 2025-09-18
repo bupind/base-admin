@@ -5,11 +5,11 @@ namespace Base\Admin\Form\Field;
 class Color extends Text
 {
     protected static $css = [
-        '/vendor/base-admin/coloris/coloris.min.css',
+        '/vendor/base/coloris/coloris.min.css',
     ];
 
     protected static $js = [
-        '/vendor/base-admin/coloris/coloris.min.js',
+        '/vendor/base/coloris/coloris.min.js',
     ];
 
     /**
