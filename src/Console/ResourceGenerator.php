@@ -10,45 +10,48 @@ class ResourceGenerator
      * @var Model
      */
     protected $model;
-
     /**
      * @var array
      */
     protected $formats = [
-        'form_field' => "\$form->%s('%s', __('%s'))",
-        'show_field' => "\$show->field('%s', __('%s'))",
+        'form_field'  => "\$form->%s('%s', __('%s'))",
+        'show_field'  => "\$show->field('%s', __('%s'))",
         'grid_column' => "\$grid->column('%s', __('%s'))",
     ];
-
+    /**
+     * @var array
+     */
+    protected $fieldTypeMapping = [
+        'ip'          => 'ip',
+        'email'       => 'email|mail',
+        'password'    => 'password|pwd',
+        'url'         => 'url|link|src|href',
+        'phonenumber' => 'mobile|phone',
+        'color'       => 'color|rgb',
+        'image'       => 'image|img|avatar|pic|picture|cover',
+        'file'        => 'file|attachment',
+    ];
     /**
      * @var array
      */
     private $doctrineTypeMapping = [
         'string' => [
-            'enum', 'geometry', 'geometrycollection', 'linestring',
-            'polygon', 'multilinestring', 'multipoint', 'multipolygon',
+            'enum',
+            'geometry',
+            'geometrycollection',
+            'linestring',
+            'polygon',
+            'multilinestring',
+            'multipoint',
+            'multipolygon',
             'point',
         ],
     ];
 
     /**
-     * @var array
-     */
-    protected $fieldTypeMapping = [
-        'ip' => 'ip',
-        'email' => 'email|mail',
-        'password' => 'password|pwd',
-        'url' => 'url|link|src|href',
-        'phonenumber' => 'mobile|phone',
-        'color' => 'color|rgb',
-        'image' => 'image|img|avatar|pic|picture|cover',
-        'file' => 'file|attachment',
-    ];
-
-    /**
      * ResourceGenerator constructor.
      *
-     * @param  mixed  $model
+     * @param mixed $model
      */
     public function __construct($model)
     {
@@ -56,19 +59,17 @@ class ResourceGenerator
     }
 
     /**
-     * @param  mixed  $model
+     * @param mixed $model
      * @return mixed
      */
     protected function getModel($model)
     {
-        if ($model instanceof Model) {
+        if($model instanceof Model) {
             return $model;
         }
-
-        if (! class_exists($model) || ! is_string($model) || ! is_subclass_of($model, Model::class)) {
+        if(!class_exists($model) || !is_string($model) || !is_subclass_of($model, Model::class)) {
             throw new \InvalidArgumentException("Invalid model [$model] !");
         }
-
         return new $model;
     }
 
@@ -78,21 +79,17 @@ class ResourceGenerator
     public function generateForm()
     {
         $reservedColumns = $this->getReservedColumns();
-
         $output = '';
-
-        foreach ($this->getTableColumns() as $column) {
+        foreach($this->getTableColumns() as $column) {
             $name = $column->getName();
-            if (in_array($name, $reservedColumns)) {
+            if(in_array($name, $reservedColumns)) {
                 continue;
             }
-            $type = $column->getType()->getName();
+            $type    = $column->getType()->getName();
             $default = $column->getDefault();
-
             $defaultValue = '';
-
             // set column fieldType and defaultValue
-            switch ($type) {
+            switch($type) {
                 case 'boolean':
                 case 'bool':
                     $fieldType = 'switch';
@@ -104,8 +101,8 @@ class ResourceGenerator
                     break;
                 case 'string':
                     $fieldType = 'text';
-                    foreach ($this->fieldTypeMapping as $type => $regex) {
-                        if (preg_match("/^($regex)$/i", $name) !== 0) {
+                    foreach($this->fieldTypeMapping as $type => $regex) {
+                        if(preg_match("/^($regex)$/i", $name) !== 0) {
                             $fieldType = $type;
                             break;
                         }
@@ -124,15 +121,15 @@ class ResourceGenerator
                     $fieldType = 'decimal';
                     break;
                 case 'datetime':
-                    $fieldType = 'datetime';
+                    $fieldType    = 'datetime';
                     $defaultValue = "date('Y-m-d H:i:s')";
                     break;
                 case 'date':
-                    $fieldType = 'date';
+                    $fieldType    = 'date';
                     $defaultValue = "date('Y-m-d')";
                     break;
                 case 'time':
-                    $fieldType = 'time';
+                    $fieldType    = 'time';
                     $defaultValue = "date('H:i:s')";
                     break;
                 case 'text':
@@ -140,56 +137,17 @@ class ResourceGenerator
                     $fieldType = 'textarea';
                     break;
                 default:
-                    $fieldType = 'text';
+                    $fieldType    = 'text';
                     $defaultValue = "'{$default}'";
             }
-
             $defaultValue = $defaultValue ?: $default;
-
             $label = $this->formatLabel($name);
-
             $output .= sprintf($this->formats['form_field'], $fieldType, $name, $label);
-
-            if (trim($defaultValue, "'\"")) {
+            if(trim($defaultValue, "'\"")) {
                 $output .= "->default({$defaultValue})";
             }
-
             $output .= ";\r\n";
         }
-
-        return $output;
-    }
-
-    public function generateShow()
-    {
-        $output = '';
-
-        foreach ($this->getTableColumns() as $column) {
-            $name = $column->getName();
-
-            // set column label
-            $label = $this->formatLabel($name);
-
-            $output .= sprintf($this->formats['show_field'], $name, $label);
-
-            $output .= ";\r\n";
-        }
-
-        return $output;
-    }
-
-    public function generateGrid()
-    {
-        $output = '';
-
-        foreach ($this->getTableColumns() as $column) {
-            $name = $column->getName();
-            $label = $this->formatLabel($name);
-
-            $output .= sprintf($this->formats['grid_column'], $name, $label);
-            $output .= ";\r\n";
-        }
-
         return $output;
     }
 
@@ -201,6 +159,50 @@ class ResourceGenerator
             $this->model->getUpdatedAtColumn(),
             'deleted_at',
         ];
+    }
+
+
+    protected function getTableColumns()
+    {
+        $connection = $this->model->getConnection();
+        // Check if the connection is using Doctrine DBAL
+        if($connection->getDriverName() !== 'pgsql' && !class_exists('Doctrine\DBAL\Driver\Connection')) {
+            throw new \Exception(
+                'Doctrine DBAL is required to get database columns. Please install "doctrine/dbal" in your composer.json.'
+            );
+        }
+        $table = $connection->getTablePrefix() . $this->model->getTable();
+        // Use the Doctrine Schema Manager only if Doctrine DBAL is available
+        if(class_exists('Doctrine\DBAL\Driver\Connection')) {
+            /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $schema */
+            $schema = $connection->getDoctrineSchemaManager();
+            // Custom mapping the types that Doctrine DBAL does not support
+            $databasePlatform = $schema->getDatabasePlatform();
+            foreach($this->doctrineTypeMapping as $doctrineType => $dbTypes) {
+                foreach($dbTypes as $dbType) {
+                    $databasePlatform->registerDoctrineTypeMapping($dbType, $doctrineType);
+                }
+            }
+            // Handle potential table being prefixed with a database name
+            $database = null;
+            if(strpos($table, '.')) {
+                [$database, $table] = explode('.', $table);
+            }
+            return $schema->listTableColumns($table, $database);
+        }
+        // Return an empty array or handle non-Doctrine case
+        return [];
+    }
+
+    /**
+     * Format label.
+     *
+     * @param string $value
+     * @return string
+     */
+    protected function formatLabel($value)
+    {
+        return ucfirst(str_replace(['-', '_'], ' ', $value));
     }
 
     /**
@@ -238,55 +240,28 @@ class ResourceGenerator
     //
     //        return $schema->listTableColumns($table, $database);
     //    }
-
-    protected function getTableColumns()
+    public function generateShow()
     {
-        $connection = $this->model->getConnection();
-
-        // Check if the connection is using Doctrine DBAL
-        if ($connection->getDriverName() !== 'pgsql' && ! class_exists('Doctrine\DBAL\Driver\Connection')) {
-            throw new \Exception(
-                'Doctrine DBAL is required to get database columns. Please install "doctrine/dbal" in your composer.json.'
-            );
+        $output = '';
+        foreach($this->getTableColumns() as $column) {
+            $name = $column->getName();
+            // set column label
+            $label = $this->formatLabel($name);
+            $output .= sprintf($this->formats['show_field'], $name, $label);
+            $output .= ";\r\n";
         }
-
-        $table = $connection->getTablePrefix().$this->model->getTable();
-
-        // Use the Doctrine Schema Manager only if Doctrine DBAL is available
-        if (class_exists('Doctrine\DBAL\Driver\Connection')) {
-            /** @var \Doctrine\DBAL\Schema\AbstractSchemaManager $schema */
-            $schema = $connection->getDoctrineSchemaManager();
-
-            // Custom mapping the types that Doctrine DBAL does not support
-            $databasePlatform = $schema->getDatabasePlatform();
-
-            foreach ($this->doctrineTypeMapping as $doctrineType => $dbTypes) {
-                foreach ($dbTypes as $dbType) {
-                    $databasePlatform->registerDoctrineTypeMapping($dbType, $doctrineType);
-                }
-            }
-
-            // Handle potential table being prefixed with a database name
-            $database = null;
-            if (strpos($table, '.')) {
-                [$database, $table] = explode('.', $table);
-            }
-
-            return $schema->listTableColumns($table, $database);
-        }
-
-        // Return an empty array or handle non-Doctrine case
-        return [];
+        return $output;
     }
 
-    /**
-     * Format label.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    protected function formatLabel($value)
+    public function generateGrid()
     {
-        return ucfirst(str_replace(['-', '_'], ' ', $value));
+        $output = '';
+        foreach($this->getTableColumns() as $column) {
+            $name  = $column->getName();
+            $label = $this->formatLabel($name);
+            $output .= sprintf($this->formats['grid_column'], $name, $label);
+            $output .= ";\r\n";
+        }
+        return $output;
     }
 }

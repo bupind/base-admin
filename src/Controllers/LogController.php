@@ -2,89 +2,53 @@
 
 namespace Base\Admin\Controllers;
 
-use Illuminate\Support\Arr;
-use Base\Admin\Auth\Database\OperationLog;
-use Base\Admin\Grid;
+use App\Http\Controllers\Controller;
+use Base\Admin\Facades\Admin;
+use Base\Admin\Layout\Content;
+use Base\Admin\Widgets\LogViewer;
+use Illuminate\Http\Request;
 
-class LogController extends AdminController
+class LogController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function title()
+    public function index(Request $request, $file = null)
     {
-        return trans('backend.operation_log');
-    }
-
-    /**
-     * @return Grid
-     */
-    protected function grid()
-    {
-        $grid = new Grid(new OperationLog);
-
-        $grid->model()->orderBy('id', 'DESC');
-
-        $grid->column('id', 'ID')->sortable();
-        $grid->column('user.name', 'User');
-        $grid->column('method')->display(function ($method) {
-            $color = Arr::get(OperationLog::$methodColors, $method, 'grey');
-
-            return "<span class=\"badge bg-$color\">$method</span>";
-        });
-        $grid->column('path')->label('info');
-        $grid->column('ip')->label('primary');
-        $grid->column('input')->display(function ($input) {
-            $input = json_decode($input, true);
-            $input = Arr::except($input, ['_pjax', '_token', '_method', '_previous_']);
-            if (empty($input)) {
-                return '<code>{}</code>';
-            }
-
-            return '<pre>'.json_encode($input, JSON_PRETTY_PRINT | JSON_HEX_TAG).'</pre>';
-        });
-
-        $grid->column('created_at', trans('backend.created_at'));
-
-        $grid->actions(function (Grid\Displayers\Actions\Actions $actions) {
-            $actions->disableEdit();
-            $actions->disableView();
-        });
-
-        $grid->disableCreateButton();
-
-        $grid->filter(function (Grid\Filter $filter) {
-            $userModel = config('backend.database.users_model');
-
-            $filter->equal('user_id', 'User')->select($userModel::all()->pluck('name', 'id'));
-            $filter->equal('method')->select(array_combine(OperationLog::$methods, OperationLog::$methods));
-            $filter->like('path');
-            $filter->equal('ip');
-        });
-
-        return $grid;
-    }
-
-    /**
-     * @param  mixed  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy($id)
-    {
-        $ids = explode(',', $id);
-
-        if (OperationLog::destroy(array_filter($ids))) {
-            $data = [
-                'status' => true,
-                'message' => trans('backend.delete_succeeded'),
-            ];
-        } else {
-            $data = [
-                'status' => false,
-                'message' => trans('backend.delete_failed'),
-            ];
+        if($file === null) {
+            $file = (new LogViewer())->getLastModifiedLog();
         }
+        return Admin::content(function(Content $content) use ($file, $request) {
+            $offset = $request->get('offset');
+            $viewer = new LogViewer($file);
+            $content->body(view('backend::logs', [
+                'logs'                          => $viewer->fetch($offset),
+                'logFiles'                      => $viewer->getLogFiles(),
+                'fileName'                      => $viewer->file,
+                'end'                           => $viewer->getFilesize(),
+                'tailPath'                      => route('log-viewer-tail', ['log' => $viewer->file]),
+                'prevUrl'                       => $viewer->getPrevPageUrl(),
+                'nextUrl'                       => $viewer->getNextPageUrl(),
+                'filePath'                      => $viewer->getFilePath(),
+                'size'                          => static::bytesToHuman($viewer->getFilesize()),
+                'bypass_protected_urls_find'    => $viewer->bypass_protected_urls_find,
+                'bypass_protected_urls_replace' => $viewer->bypass_protected_urls_replace,
+            ]));
+            $content->header($viewer->getFilePath());
+        });
+    }
 
-        return response()->json($data);
+    protected static function bytesToHuman($bytes)
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+        for($i = 0; $bytes > 1024; $i++) {
+            $bytes /= 1024;
+        }
+        return round($bytes, 2) . ' ' . $units[$i];
+    }
+
+    public function tail(Request $request, $file)
+    {
+        $offset = $request->get('offset');
+        $viewer = new LogViewer($file);
+        [$pos, $logs] = $viewer->tail($offset);
+        return compact('pos', 'logs');
     }
 }

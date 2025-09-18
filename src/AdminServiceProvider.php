@@ -21,18 +21,12 @@ class AdminServiceProvider extends ServiceProvider
         Console\InstallCommand::class,
         Console\PublishCommand::class,
         Console\UninstallCommand::class,
-        Console\ImportCommand::class,
-        Console\CreateUserCommand::class,
-        Console\ResetPasswordCommand::class,
-        Console\ExtendCommand::class,
         Console\ExportSeedCommand::class,
         Console\MinifyCommand::class,
-        Console\FormCommand::class,
         Console\PermissionCommand::class,
         Console\ActionCommand::class,
         Console\GenerateMenuCommand::class,
         Console\ConfigCommand::class,
-        Console\DevLinksCommand::class,
     ];
     /**
      * The application's route middleware.
