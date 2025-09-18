@@ -3,6 +3,7 @@
 namespace Base\Admin;
 
 use Base\Admin\Layout\Content;
+use Base\Admin\Widgets\LogViewer;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Blade;
@@ -75,6 +76,7 @@ class AdminServiceProvider extends ServiceProvider
         $this->registerPublishing();
         $this->compatibleBlade();
         $this->bladeDirectives();
+        LogViewer::boot();
     }
 
     /**

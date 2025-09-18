@@ -25,7 +25,7 @@
 <div class="wrapper">
     @include('backend::partials.header')
     @include('backend::partials.sidebar')
-    <main id="main" class="p-4">
+    <main id="main">
         <div id="pjax-container">
             <!--start-pjax-container-->
             {!! Admin::style() !!}
