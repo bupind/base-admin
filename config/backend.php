@@ -74,7 +74,7 @@ return [
     ],
     'check_route_permission'    => true,
     'check_menu_roles'          => true,
-    'default_avatar'            => '/vendor/local/local/gfx/user.svg',
+    'default_avatar'            => '/vendor/base/local/gfx/user.svg',
     'map_provider'              => 'openstreetmaps',
     'skin'                      => '',
     'layout'                    => ['sidebar-mini', 'sidebar-collapse'],

@@ -21,18 +21,20 @@ backend.init = function () {
 backend.menu = {
     init: function () {
         let menuToggle = document.getElementById('menu-toggle');
-        menuToggle.addEventListener('click', function () {
-            if (!document.body.classList.contains('side-menu-closed')) {
-                backend.menu.close();
-            }
-            if (window.innerWidth < 576) {
-                document.body.classList.toggle('side-menu-open');
-                document.body.classList.remove('side-menu-closed');
-            } else {
-                document.body.classList.toggle('side-menu-closed');
-                document.body.classList.remove('side-menu-open');
-            }
-        });
+        if (menuToggle) {
+            menuToggle.addEventListener('click', function () {
+                if (!document.body.classList.contains('side-menu-closed')) {
+                    backend.menu.close();
+                }
+                if (window.innerWidth < 576) {
+                    document.body.classList.toggle('side-menu-open');
+                    document.body.classList.remove('side-menu-closed');
+                } else {
+                    document.body.classList.toggle('side-menu-closed');
+                    document.body.classList.remove('side-menu-open');
+                }
+            });
+        }
         window.addEventListener('resize', function () {
             if (window.innerWidth < 576) {
                 document.body.classList.remove('side-menu-closed');

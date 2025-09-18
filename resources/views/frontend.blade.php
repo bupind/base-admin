@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}">
 <head>
@@ -12,6 +11,10 @@
     @if(!is_null($favicon = Admin::favicon()))
         <link rel="shortcut icon" href="{{$favicon}}">
     @endif
+    <link rel="stylesheet" href="{{ asset('assets/vendor/font-awesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/tiny-slider/tiny-slider.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/custome.css') }}">
 
     {!! Admin::headerJs() !!}
     {!! Admin::js() !!}
@@ -26,25 +29,26 @@
     </style>
 </head>
 
-<body class="">
+<body>
 <div class="wrapper">
-    @include('layout.partials.header')
     <main id="main">
+        @include('layout.partials.header')
         <div id="pjax-container">
             <!--pjax-start-->
             <div id="app">
                 @if(!empty($_view_))
                     @include($_view_['view'], $_view_['data'])
                 @endif
-
-                @yield('content')
             </div>
             <!--pjax-end-->
         </div>
+        @include('layout.partials.footer')
     </main>
-    @include('layout.partials.footer')
 </div>
 
 <button id="totop" title="Go to top" style="display: none;"><i class="icon-chevron-up"></i></button>
+<script src="{{ asset('assets/vendor/tiny-slider/tiny-slider.js') }}"></script>
+<script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('assets/js/functions.js') }}"></script>
 </body>
 </html>
