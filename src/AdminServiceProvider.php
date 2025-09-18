@@ -69,6 +69,8 @@ class AdminServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(resource_path('views/layout/backend'), 'backend');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'backend');
+        $this->loadViewsFrom(resource_path('views/layout/frontend'), 'frontend');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views/frontend', 'frontend');
         $this->ensureHttps();
         if(file_exists($routes = admin_path('routes.php'))) {
             $this->loadRoutesFrom($routes);
