@@ -16,7 +16,8 @@
     {!! Admin::js_trans() !!}
 </head>
 
-<body class="{{config('backend.skin')}} {{ $body_classes }}">
+<body class="{{config('backend.skin')}} {{ $body_classes }}" data-backend-title="{{ $backendTitle ?? config('backend.title') }}">
+
 @if($alert = config('backend.top_alert'))
     <div class="alert">
         {!! $alert !!}
@@ -46,8 +47,10 @@
 <button id="totop" title="Go to top" style="display: none;"><i class="icon-chevron-up"></i></button>
 
 <script>
+    window.backendConfig = {
+        title: "{{ config('backend.title') }}"
+    };
     function LA() {}
-
     LA.token = "{{ csrf_token() }}";
     LA.user = @json($_user_);
 </script>

@@ -2,6 +2,7 @@
 
 namespace Base\Admin\Grid\Actions;
 
+use Base\Admin\Actions\Response;
 use Base\Admin\Actions\RowAction;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,24 @@ class Delete extends RowAction
         ];
     }
 
+    /*
+    // could use dialog as well instead of addScript
+    public function dialog()
+    {
+        $options  = [
+            "type" => "warning",
+            "showCancelButton"=> true,
+            "confirmButtonColor"=> "#DD6B55",
+            "confirmButtonText"=> __('confirm'),
+            "showLoaderOnConfirm"=> true,
+            "cancelButtonText"=>  __('cancel'),
+        ];
+        $this->confirm('Are you sure delete?', '', $options);
+    }
+    */
+    /**
+     * @return Response
+     */
     public function handle(Model $model)
     {
         $trans = [

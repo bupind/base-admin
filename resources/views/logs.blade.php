@@ -34,7 +34,7 @@
                         @foreach($logs as $index => $log)
                             <tr>
                                 <td>
-                                    <span class="badge bg-{{\Base\Admin\Widgets\LogViewer::$levelColors[$log['level']]}}">{{ $log['level'] }}</span>
+                                    <span class="badge bg-{{Crud\Backend\Helpers\LogViewer::$levelColors[$log['level']]}}">{{ $log['level'] }}</span>
                                 </td>
                                 <td style="width:150px;">{{ $log['time'] }}</td>
                                 <td><code style="word-break: break-all;">{{ $log['info'] }}</code></td>

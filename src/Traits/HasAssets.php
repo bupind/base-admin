@@ -183,13 +183,6 @@ trait HasAssets
         return view('backend::partials.style', compact('style'));
     }
 
-    /**
-     * Add css or get all css.
-     *
-     * @param null $css
-     * @param bool $minify
-     * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
     public static function css($css = null, $minify = true)
     {
         static::ignoreMinify('css', $css, $minify);
@@ -206,7 +199,7 @@ trait HasAssets
 
     /**
      * @param string $assets
-     * @param bool $ignore
+     * @param bool   $ignore
      */
     public static function ignoreMinify($type, $assets, $ignore = true)
     {
@@ -310,7 +303,7 @@ trait HasAssets
 
     /**
      * @param string $script
-     * @param bool $deferred
+     * @param bool   $deferred
      * @return array|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public static function script($script = '', $deferred = false)

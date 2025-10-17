@@ -184,13 +184,8 @@ backend.ajax = {
                 }
             }
         }, false);
-        // forms that should be submitted with ajax
-        // now handled by backend.form.initAjax()
-        // also needs to work for widgets
         NProgress.configure({parent: '#main'});
-    }, // use navigate when you want history working
-    // and the url to be changed
-    navigate: function (url, preventPopState) {
+    }, navigate: function (url, preventPopState) {
         backend.collectGarbage();
         if (window.innerWidth < 540) {
             document.body.classList.remove('side-menu-closed');
@@ -245,15 +240,7 @@ backend.ajax = {
         };
         obj.data._token = LA.token;
         this.request(url, obj);
-    }, /*
-     NOTICE: axios automatically converts data to json string if its an object.
-     also NOTE: axios.delete doesn't support _POST data. (dont use formData in combination with delete, just grab the vars from the json payload from the request)
-     to send application/x-www-form-urlencoded data use formData object:
-
-     const formData = new FormData();
-     formData.append('name', value);
-     */
-    post: function (url, data, result_function) {
+    }, post: function (url, data, result_function) {
         let obj = {
             method: 'post', data: data, url: url,
         };
@@ -307,7 +294,6 @@ backend.ajax = {
             // http.ClientRequest in node.js
             console.log(error.request);
         } else {
-            // Something happened in setting up the request that triggered an Error
             console.log('An error has accurred:');
             console.log(error);
         }
@@ -323,13 +309,13 @@ backend.pages = {
         this.initBootstrap();
     }, setTitle: function () {
         if (document.querySelector('main h1')) {
-            let h1_title = document.querySelector('main h1').innerText;
-            if (h1_title) {
-                document.title = 'Admin | ' + h1_title;
+            let appTitle = (window.backendConfig && window.backendConfig.title) ? window.backendConfig.title : 'Admin';
+            const h1 = document.querySelector('main h1');
+            if (h1) {
+                document.title = h1.innerText + ' | ' + appTitle;
             }
         }
     }, initBootstrap: function () {
-        // popovers
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]:not(.ie)'));
         var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
             return new bootstrap.Popover(popoverTriggerEl);

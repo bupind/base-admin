@@ -2,8 +2,8 @@
 
 namespace Base\Admin\Layout;
 
-use Base\Admin\Grid;
 use Illuminate\Contracts\Support\Renderable;
+use Base\Admin\Grid;
 
 class Column implements Buildable
 {
@@ -13,6 +13,7 @@ class Column implements Buildable
      * @var array
      */
     protected $width = [];
+
     /**
      * @var array
      */
@@ -21,21 +22,23 @@ class Column implements Buildable
     /**
      * Column constructor.
      *
-     * @param int $width
+     * @param  int  $width
      */
     public function __construct($content, $width = 12)
     {
-        if($content instanceof \Closure) {
+        if ($content instanceof \Closure) {
             call_user_func($content, $this);
         } else {
             $this->append($content);
         }
+
         // /// set width.
         // if null, or $this->width is empty array, set as "md" => "12"
-        if(is_null($width) || (is_array($width) && count($width) === 0)) {
+        if (is_null($width) || (is_array($width) && count($width) === 0)) {
             $this->width['md'] = 12;
-        } // $this->width is number(old version), set as "md" => $width
-        elseif(is_numeric($width)) {
+        }
+        // $this->width is number(old version), set as "md" => $width
+        elseif (is_numeric($width)) {
             $this->width['md'] = $width;
         } else {
             $this->width = $width;
@@ -51,6 +54,7 @@ class Column implements Buildable
     public function append($content)
     {
         $this->contents[] = $content;
+
         return $this;
     }
 
@@ -62,16 +66,22 @@ class Column implements Buildable
      */
     public function row($content)
     {
-        if(!$content instanceof \Closure) {
+        if (! $content instanceof \Closure) {
             $row = new Row($content);
         } else {
             $row = new Row;
+
             call_user_func($content, $row);
         }
+
         ob_start();
+
         $row->build();
+
         $contents = ob_get_contents();
+
         ob_end_clean();
+
         return $this->append($contents);
     }
 
@@ -81,13 +91,15 @@ class Column implements Buildable
     public function build()
     {
         $this->startColumn();
-        foreach($this->contents as $content) {
-            if($content instanceof Renderable || $content instanceof Grid) {
+
+        foreach ($this->contents as $content) {
+            if ($content instanceof Renderable || $content instanceof Grid) {
                 echo $content->render();
             } else {
-                echo (string)$content;
+                echo (string) $content;
             }
         }
+
         $this->endColumn();
     }
 
@@ -97,9 +109,10 @@ class Column implements Buildable
     protected function startColumn()
     {
         // get class name using width array
-        $classnName = collect($this->width)->map(function($value, $key) {
+        $classnName = collect($this->width)->map(function ($value, $key) {
             return "col-$key-$value";
         })->implode(' ');
+
         echo "<div class=\"{$classnName}\">";
     }
 

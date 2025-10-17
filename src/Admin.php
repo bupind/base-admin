@@ -17,7 +17,7 @@ class Admin
 {
     use HasAssets;
 
-    public const VERSION = '1.0.1';
+    public const VERSION = '1.0.0';
     public static    $metaTitle;
     public static    $favicon;
     public static    $extensions       = [];
@@ -188,13 +188,14 @@ class Admin
                 $router->resource('auth/roles', 'RoleController')->names('backend.auth.roles');
                 $router->resource('auth/permissions', 'PermissionController')->names('backend.auth.permissions');
                 $router->resource('auth/menu', 'MenuController', ['except' => ['create']])->names('backend.auth.menu');
-                $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])->names('backend.auth.logs');
-                $router->resource('auth/audit', 'AuditController', ['only' => ['index', 'destroy']])->names('backend.auth.audit');
-
+                $router->resource('auth/logs', 'LogController', ['only' => ['index', 'destroy']])
+                    ->names('backend.auth.logs');
                 $router->post('_handle_form_', 'HandleController@handleForm')->name('backend.handle-form');
                 $router->post('_handle_action_', 'HandleController@handleAction')->name('backend.handle-action');
-                $router->get('_handle_selectable_', 'HandleController@handleSelectable')->name('backend.handle-selectable');
-                $router->get('_handle_renderable_', 'HandleController@handleRenderable')->name('backend.handle-renderable');
+                $router->get('_handle_selectable_', 'HandleController@handleSelectable')
+                    ->name('backend.handle-selectable');
+                $router->get('_handle_renderable_', 'HandleController@handleRenderable')
+                    ->name('backend.handle-renderable');
             });
             $authController = config('backend.auth.controller', AuthController::class);
             /* @var \Illuminate\Routing\Router $router */

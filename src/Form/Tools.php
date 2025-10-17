@@ -172,7 +172,7 @@ class Tools implements Renderable
         ];
         return <<<HTML
             <div class="btn-group">
-                <a  onclick="backend.resource.delete(event,this)" data-url="{$this->getDeletePath()}" data-list_url="{$this->getListPath()}" class="btn btn-sm btn-danger delete" title="{$trans['delete']}">
+                <a onclick="backend.resource.delete(event,this)" data-url="{$this->getDeletePath()}" data-list_url="{$this->getListPath()}" class="btn btn-sm btn-danger delete" title="{$trans['delete']}">
                     <i class="icon-trash"></i><span class="hidden-xs">  {$trans['delete']}</span>
                 </a>
             </div>

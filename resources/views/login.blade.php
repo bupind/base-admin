@@ -1,72 +1,128 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>{{config('backend.title')}} | {{ __('backend.login') }}</title>
-		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<!doctype html>
+<html lang="en" class="no-focus">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 
-		@if(!is_null($favicon = Admin::favicon()))
-		<link rel="shortcut icon" href="{{$favicon}}">
-		@endif
+    <title>{{ config('backend.title') }} | {{ __('backend.login') }}</title>
 
-		<link rel="stylesheet" href="{{ Admin::asset("local/css/styles.css")}}">
-		<script src="{{ Admin::asset("bootstrap5/bootstrap.bundle.min.js")}}"></script>
+    <meta name="description" content="{{ config('app.description') }}">
+    <meta name="author" content="{{ config('app.author') }}">
+    <meta name="robots" content="noindex, nofollow">
 
-	</head>
-	<body class="bg-light" @if(config('backend.login_background_image'))style="background: url({{config('backend.login_background_image')}}) no-repeat;background-size: cover;"@endif>
-		<div class="d-flex justify-content-center align-items-center h-100">
-			<div class="container m-4" style="max-width:400px;">
-				<h1 class="text-center mb-3 h2"><a class="text-decoration-none text-dark" href="{{ admin_url('/') }}">{{config('backend.name')}}</a></h1>
-				<div class="bg-body p-4 shadow-sm rounded-3">
+    <!-- Open Graph Meta -->
+    <meta property="og:title" content="{{ config('backend.title') }}">
+    <meta property="og:site_name" content="{{ config('backend.title') }}">
+    <meta property="og:description" content="{{ config('app.description') }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ config('app.url') }}">
+    <meta property="og:image" content="">
 
-					@if($errors->has('attempts'))
-						<div class="alert alert-danger m-0 text-center">{{$errors->first('attempts')}}</div>
-					@else
+    @if(!is_null($favicon = Admin::favicon()))
+        <link rel="shortcut icon" href="{{$favicon}}">
+    @endif
 
-					<form action="{{ admin_url('auth/login') }}" method="post">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli:300,400,400i,600,700">
+    <link rel="stylesheet" href="{{ Admin::asset("local/css/codebase.css")}}">
 
-						<input type="hidden" name="_token" value="{{ csrf_token() }}">
-						<div class="mb-3">
+    <style>
+        .logo-img {
+            max-width: 100%;
+            margin-top: 100px;
+            transform: scale(0.7) translate(-21%, 0);
+        }
+    </style>
+</head>
 
-							@if($errors->has('username'))
-								<div class="alert alert-danger">{{$errors->first('username')}}</div>
-							@endif
+<body>
+<div id="page-container" class="main-content-boxed bg-secondary">
+    <!-- Main Container -->
+    <main id="main-container">
+        <!-- Page Content -->
+        <div class="bg-image" style="background-color: #003366;">
 
-							<label for="username" class="form-label">{{ __('backend.username') }}</label>
-							<div class="input-group mb-3">
-								<span class="input-group-text"><i class="icon-user"></i></span>
-								<input type="text" class="form-control" placeholder="{{ __('backend.username') }}" name="username" id="username" value="{{ old('username') }}" required>
-							</div>
-						</div>
+            <div class="row mx-0">
+                <!-- Left side -->
+                <div class="hero-static col-md-6 col-xl-8 d-none d-md-flex align-items-md-end">
+                    <div class="p-30" data-toggle="appear" style="padding-bottom: 20px !important">
 
-						<div class="mb-3">
-							<label for="password" class="form-label">{{ __('backend.password') }}</label>
-							<div class="input-group mb-3">
-								<span class="input-group-text"><i class="icon-eye"></i></span>
-								<input type="password" class="form-control" placeholder="{{ __('backend.password') }}" name="password" id="password" required>
-							</div>
+                        <p class="font-italic text-white mb-0">
+                            &copy; {{ config('backend.name') }} {{ now()->format('Y') }}
+                        </p>
+                    </div>
+                </div>
 
-							@if($errors->has('password'))
-								<div class="alert alert-danger">{{$errors->first('password') }}</div>
-							@endif
-						</div>
+                <!-- Right side (Login Form) -->
+                <div class="hero-static col-md-6 col-xl-4 d-flex align-items-center bg-white"
+                     data-toggle="appear" data-class="animated fadeInRight">
+                    <div class="content content-full" style="margin-top: -150px; padding-top: 0px">
+                        <!-- Header -->
+                        <div class="px-50 py-50" style="padding-top: 0px !important; padding-left: 30px !important">
+                            <h1 class="h4 font-w700 mt-30 mb-10" style="margin-top: 60px !important">
+                                Welcome to {{ config('backend.name') }}
+                            </h1>
+                        </div>
+                        <!-- END Header -->
 
-						@if(config('backend.auth.remember'))
-						<div class="mb-3 form-check">
-							<input type="checkbox" class="form-check-input" name="remember" id="remember" value="1"  {{ (old('remember')) ? 'checked="checked"' : '' }}>
-							<label class="form-check-label" for="remember">{{ __('backend.remember_me') }}</label>
-						</div>
-						@endif
+                        <!-- Sign In Form -->
+                        <form class="px-30" action="{{ admin_url('auth/login') }}" method="POST" style="margin-top: 40px">
+                            @csrf
+                            @if($errors->has('attempts'))
+                                <div class="alert alert-danger text-center">{{ $errors->first('attempts') }}</div>
+                            @endif
 
-						<div class="clearfix">
-							<button type="submit" class="btn float-end btn-secondary">{{ __('backend.login') }}</button>
-						</div>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <h2 class="h5 font-w400 text-muted mb-0">{{ __('backend.login') }}</h2>
+                                    <div class="form-material floating">
+                                        <input type="text" class="form-control" id="username" name="username" required>
+                                        <label for="username">{{ __('backend.username') }}</label>
+                                    </div>
+                                    @error('username')
+                                    <div class="text-danger small mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
 
-					</form>
-					@endif
-				</div>
-			</div>
-		</div>
-	</body>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    <div class="form-material floating">
+                                        <input type="password" class="form-control" id="password" name="password" required>
+                                        <label for="password">{{ __('backend.password') }}</label>
+                                    </div>
+                                    @error('password')
+                                    <div class="text-danger small mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            @if(config('backend.auth.remember'))
+                                <div class="form-group row g-1">
+                                    <div class="col-12 col-md-7">
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="remember" name="remember">
+                                            <label class="custom-control-label" for="remember">{{ __('backend.remember_me') }}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-sm btn-hero btn-alt-primary w-100">
+                                    <i class="si si-login mr-10"></i> {{ __('backend.login') }}
+                                </button>
+                            </div>
+                        </form>
+                        <!-- END Sign In Form -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END Page Content -->
+    </main>
+</div>
+
+<link rel="stylesheet" href="{{ Admin::asset("local/js/codebase.core.min.js")}}">
+<link rel="stylesheet" href="{{ Admin::asset("local/js/codebase.app.min.js")}}">
+</body>
 </html>
